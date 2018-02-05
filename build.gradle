@@ -2,7 +2,7 @@ group 'com.savvasdalkitsis'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.1.4-3'
+    ext.kotlin_version = '1.2.10'
 
     repositories {
         mavenCentral()
@@ -22,8 +22,14 @@ repositories {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile (
+        "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version",
+        "org.json:json:20180130",
+    )
+    testCompile (
+        'junit:junit:4.11',
+        "com.shazam:shazamcrest:0.11",
+    )
 }
 
 compileKotlin {
