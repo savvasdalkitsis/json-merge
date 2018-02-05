@@ -1,9 +1,9 @@
+package com.savvasdalkitsis.jsonmerger
+
 import com.google.gson.Gson
 import com.google.gson.JsonElement
-import com.savvasdalkitsis.jsonmerger.JsonMerger
 import com.shazam.shazamcrest.MatcherAssert.assertThat
 import com.shazam.shazamcrest.matcher.Matchers.sameBeanAs
-import org.json.JSONObject
 import org.junit.Test
 import java.lang.IllegalArgumentException
 
