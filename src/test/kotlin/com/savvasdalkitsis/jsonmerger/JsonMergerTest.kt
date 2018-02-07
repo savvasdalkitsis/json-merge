@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.shazam.shazamcrest.MatcherAssert.assertThat
 import com.shazam.shazamcrest.matcher.Matchers.sameBeanAs
+import org.json.JSONObject
 import org.junit.Test
 import java.lang.IllegalArgumentException
 
@@ -196,6 +197,26 @@ class JsonMergerTest {
             "param": {
                 "newKey": "newValue"
             }
+        }
+        """)
+    }
+
+    @Test
+    fun `merges JSONObjects`() {
+        val merge = JsonMerger().merge(baseJson = JSONObject("""
+        {
+            "param1": 1
+        }
+        """), overrideJson = JSONObject("""
+        {
+            "param2": 2
+        }
+        """))
+
+        assertSameJson(merge, """
+        {
+            "param1": 1,
+            "param2": 2
         }
         """)
     }

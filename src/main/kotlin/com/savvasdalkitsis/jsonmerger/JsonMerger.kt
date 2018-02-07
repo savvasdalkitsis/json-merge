@@ -26,6 +26,9 @@ class JsonMerger(val arrayMergeMode: ArrayMergeMode = REPLACE_ARRAY,
         throw throwUnsupportedElements(baseJson, overrideJson, e)
     }
 
+    fun merge(baseJson: JSONObject, overrideJson: JSONObject): String
+            = mergeElement(baseJson, overrideJson).toString()
+
     private fun mergeElement(base: Any?, newValue: Any) = when (base) {
         is JSONObject -> mergeObject(base, newValue)
         is JSONArray -> mergeArray(base, newValue)
