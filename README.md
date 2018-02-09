@@ -13,6 +13,7 @@ and for keys that are present in both the base and override json, it will
 simply use the ones from the override:
 
 - base
+
 ```json
 {
   "age": 24,
@@ -20,7 +21,9 @@ simply use the ones from the override:
   "registered": false
 }
 ```
+
 - override
+
 ```json
 {
   "lastName": "Doe",
@@ -28,9 +31,10 @@ simply use the ones from the override:
   "registered": true
 }
 ```
-- merged
-```json
 
+- merged
+
+```json
 {
   "age": 30,
   "name": "John",
@@ -44,23 +48,29 @@ simply use the ones from the override:
 There are two modes for merging arrays:
 
 #### REPLACE_ARRAY
+
 ```kotlin
 JsonMerger(arrayMergeMode = JsonMerger.ArrayMergeMode.REPLACE_ARRAY)
 ```
 
 - base
+
 ```json
 {
   "array": [1, 2, 3]
 }
 ```
+
 - override
+
 ```json
 {
   "array": [4, 5, 6]
 }
 ```
+
 - merged
+
 ```json
 {
   "array": [4, 5, 6]
@@ -68,23 +78,28 @@ JsonMerger(arrayMergeMode = JsonMerger.ArrayMergeMode.REPLACE_ARRAY)
 ```
 
 #### MERGE_ARRAY
+
 ```kotlin
 JsonMerger(arrayMergeMode = JsonMerger.ArrayMergeMode.MERGE_ARRAY)
 ```
 
 - base
+
 ```json
 {
   "array": [1, 2, 3]
 }
 ```
 - override
+
 ```json
 {
   "array": [4, 5, 6]
 }
 ```
+
 - merged
+
 ```json
 {
   "array": [1, 2, 3, 4, 5, 6]
@@ -96,11 +111,13 @@ JsonMerger(arrayMergeMode = JsonMerger.ArrayMergeMode.MERGE_ARRAY)
 There are two modes for merging objects:
 
 #### REPLACE_OBJECT
+
 ```kotlin
 JsonMerger(objectMergeMode = JsonMerger.ObjectMergeMode.REPLACE_OBJECT)
 ```
 
 - base
+
 ```json
 {
   "object": {
@@ -108,7 +125,9 @@ JsonMerger(objectMergeMode = JsonMerger.ObjectMergeMode.REPLACE_OBJECT)
   }
 }
 ```
+
 - override
+
 ```json
 {
   "object": {
@@ -116,7 +135,9 @@ JsonMerger(objectMergeMode = JsonMerger.ObjectMergeMode.REPLACE_OBJECT)
   }
 }
 ```
+
 - merged
+
 ```json
 {
   "object": {
@@ -126,11 +147,13 @@ JsonMerger(objectMergeMode = JsonMerger.ObjectMergeMode.REPLACE_OBJECT)
 ```
 
 #### MERGE_OBJECT
+
 ```kotlin
 JsonMerger(objectMergeMode = JsonMerger.ObjectMergeMode.MERGE_OBJECT)
 ```
 
 - base
+
 ```json
 {
   "object": {
@@ -138,6 +161,7 @@ JsonMerger(objectMergeMode = JsonMerger.ObjectMergeMode.MERGE_OBJECT)
   }
 }
 ```
+
 - override
 ```json
 {
@@ -146,7 +170,9 @@ JsonMerger(objectMergeMode = JsonMerger.ObjectMergeMode.MERGE_OBJECT)
   }
 }
 ```
+
 - merged
+
 ```json
 {
   "object": {
