@@ -1,19 +1,33 @@
-group 'com.savvasdalkitsis'
-version '1.0-SNAPSHOT'
-
 buildscript {
     ext.kotlin_version = '1.2.21'
 
+    ext.dev_name = 'Savvas Dalkitsis'
+    ext.dev_email = 'kurosavvas@gmail.com'
+    ext.github_name = 'savvasdalkitsis'
+
+    ext.project_name = 'json-merge'
+    ext.project_description = 'json-merge is a library for merging json files for the JVM'
+    ext.project_group = 'com.savvasdalkitsis'
+    ext.project_artifact = 'json-merge'
+    ext.project_version = '0.0.1'
+    ext.project_license = 'The Apache Software License, Version 2.0'
+    ext.project_license_tag = 'Apache-2.0'
+    ext.project_license_url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
 
 sourceCompatibility = 1.5
 
@@ -37,4 +51,78 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            groupId project_group
+            artifactId project_artifact
+            version project_version
+            artifact sourcesJar
+            artifact javadocJar
+            pom.withXml {
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+                    name project_name
+                    description project_description
+                    url "https://github.com/$github_name/$project_name"
+                    scm {
+                        url "https://github.com/$github_name/$project_name"
+                        connection "scm:git:git://github.com/$github_name/${project_name}.git"
+                        developerConnection "scm:git:ssh:git@github.com:$github_name/${project_name}.git"
+                    }
+                    licenses {
+                        license {
+                            name project_license
+                            url project_license_url
+                            distribution 'repo'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id github_name
+                            name dev_name
+                            email dev_email
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+bintray {
+    user = BINTRAY_USER
+    key = BINTRAY_API_KEY
+    publications = ['maven']
+    pkg {
+        repo = 'maven'
+        name = project_name
+        desc = project_description
+        licenses = [project_license_tag]
+        publicDownloadNumbers = true
+        websiteUrl = "https://github.com/$github_name/$project_name"
+        issueTrackerUrl = "https://github.com/$github_name/$project_name/issues"
+        vcsUrl = "https://github.com/$github_name/${project_name}.git"
+        githubRepo = "$github_name/$project_name"
+        version {
+            name = project_version
+            vcsTag = project_version
+            gpg {
+                sign = true
+            }
+        }
+    }
 }
