@@ -14,34 +14,86 @@
  */
 package com.savvasdalkitsis.jsonmerger
 
+import com.savvasdalkitsis.jsonmerger.JsonMerger.ArrayMergeMode
 import com.savvasdalkitsis.jsonmerger.JsonMerger.ArrayMergeMode.MERGE_ARRAY
 import com.savvasdalkitsis.jsonmerger.JsonMerger.ArrayMergeMode.REPLACE_ARRAY
+import com.savvasdalkitsis.jsonmerger.JsonMerger.ObjectMergeMode
 import com.savvasdalkitsis.jsonmerger.JsonMerger.ObjectMergeMode.MERGE_OBJECT
 import com.savvasdalkitsis.jsonmerger.JsonMerger.ObjectMergeMode.REPLACE_OBJECT
 import org.json.JSONArray
 import org.json.JSONObject
 
-class JsonMerger(val arrayMergeMode: ArrayMergeMode = REPLACE_ARRAY,
-                 val objectMergeMode: ObjectMergeMode = MERGE_OBJECT) {
+/**
+ * Main object used to perform json merges. Accepts two parameters to control
+ * how the merge will be performed.
+ *
+ * @param arrayMergeMode This controls how arrays will be handled. Arrays can
+ * either be merged or replaced (default mode). See [ArrayMergeMode] for more
+ * details
+ * @param objectMergeMode This controls how objects will be handled. Objects can
+ * either be merged (default mode) or replaced. See [ObjectMergeMode] for more
+ * details
+ */
+class JsonMerger @JvmOverloads constructor(val arrayMergeMode: ArrayMergeMode = REPLACE_ARRAY,
+                                           val objectMergeMode: ObjectMergeMode = MERGE_OBJECT) {
 
+    /**
+     * Controls how arrays are handled. [REPLACE_ARRAY] will always use
+     * the array from the override json, replacing the one in base and
+     * [MERGE_ARRAY] will simply append the items from the array in the
+     * override json into the base array (if present. if not, only items
+     * from the override array will be used)
+     */
     enum class ArrayMergeMode {
         REPLACE_ARRAY,
         MERGE_ARRAY
     }
 
+    /**
+     * Controls how objects are handled. [REPLACE_OBJECT] will always use
+     * the object from the override json, replacing the one in base and
+     * [MERGE_OBJECT] will merge the two by using all items in the base
+     * object that are not present in the override and for the common items
+     * use the ones from the override (recursively applying the same rules
+     * for sub objects and arrays)
+     */
     enum class ObjectMergeMode {
         REPLACE_OBJECT,
         MERGE_OBJECT
     }
 
+    /**
+     * Parse and merge the provided json strings using the rules applied
+     * via [ArrayMergeMode] and [ObjectMergeMode]. This is a **recursive**
+     * call.
+     *
+     * @return the merged json as a [String]
+     */
     fun merge(baseJson: String, overrideJson: String): String = try {
         mergeElement(parse(baseJson), parse(overrideJson)).toString()
     } catch (e: Exception) {
         throw throwUnsupportedElements(baseJson, overrideJson, e)
     }
 
-    fun merge(baseJson: JSONObject, overrideJson: JSONObject): String
-            = mergeElement(baseJson, overrideJson).toString()
+    /**
+     * Merges the provided [JSONObject]s using the rules applied via
+     * [ArrayMergeMode] and [ObjectMergeMode]. This is a **recursive**
+     * call.
+     *
+     * @return the merged json as a [JSONObject]
+     */
+    fun merge(baseJson: JSONObject, overrideJson: JSONObject): JSONObject
+            = mergeElement(baseJson, overrideJson) as JSONObject
+
+    /**
+     * Merges the provided [JSONObject]s using the rules applied via
+     * [ArrayMergeMode] and [ObjectMergeMode]. This is a **recursive**
+     * call.
+     *
+     * @return the merged json as a [String]
+     */
+    fun mergeToString(baseJson: JSONObject, overrideJson: JSONObject): String
+            = merge(baseJson, overrideJson).toString()
 
     private fun mergeElement(base: Any?, newValue: Any) = when (base) {
         is JSONObject -> mergeObject(base, newValue)

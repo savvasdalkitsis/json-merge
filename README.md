@@ -47,7 +47,7 @@ simply use the ones from the override:
 
 There are two modes for merging arrays:
 
-#### REPLACE_ARRAY
+##### REPLACE_ARRAY
 
 ```kotlin
 JsonMerger(arrayMergeMode = JsonMerger.ArrayMergeMode.REPLACE_ARRAY)
@@ -77,7 +77,7 @@ JsonMerger(arrayMergeMode = JsonMerger.ArrayMergeMode.REPLACE_ARRAY)
 }
 ```
 
-#### MERGE_ARRAY
+##### MERGE_ARRAY
 
 ```kotlin
 JsonMerger(arrayMergeMode = JsonMerger.ArrayMergeMode.MERGE_ARRAY)
@@ -110,7 +110,7 @@ JsonMerger(arrayMergeMode = JsonMerger.ArrayMergeMode.MERGE_ARRAY)
 
 There are two modes for merging objects:
 
-#### REPLACE_OBJECT
+##### REPLACE_OBJECT
 
 ```kotlin
 JsonMerger(objectMergeMode = JsonMerger.ObjectMergeMode.REPLACE_OBJECT)
@@ -146,7 +146,7 @@ JsonMerger(objectMergeMode = JsonMerger.ObjectMergeMode.REPLACE_OBJECT)
 }
 ```
 
-#### MERGE_OBJECT
+##### MERGE_OBJECT
 
 ```kotlin
 JsonMerger(objectMergeMode = JsonMerger.ObjectMergeMode.MERGE_OBJECT)
@@ -181,6 +181,41 @@ JsonMerger(objectMergeMode = JsonMerger.ObjectMergeMode.MERGE_OBJECT)
       "param2": true
   }
 }
+```
+
+### Things to keep in mind
+
+The library is doing an in memory merge using recursion. So there are two things 
+to keep in mind when using it. 
+
+* The objects used should cannot be too large as they are expected to fit in memory 
+at the same time
+* The objects should not be too nested since the operations are recursive and you'd
+be running the risk of a stack overflow
+
+
+Download
+======
+
+The library is available on **JCenter**. Note that it is still in early development
+and things might change with subsequent versions.
+
+To use it in your project, add the following to your project
+
+- Gradle:
+
+```groovy
+compile 'com.savvasdalkitsis:json-merge:0.0.2'
+```
+
+- Maven:
+
+```xml
+<dependency>
+  <groupId>com.savvasdalkitsis</groupId>
+  <artifactId>json-merge</artifactId>
+  <version>0.0.2</version>
+</dependency>
 ```
 
 License

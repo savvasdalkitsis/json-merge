@@ -216,8 +216,8 @@ class JsonMergerTest {
     }
 
     @Test
-    fun `merges JSONObjects`() {
-        val merge = JsonMerger().merge(baseJson = JSONObject("""
+    fun `merges JSONObjects to string`() {
+        val merge = JsonMerger().mergeToString(baseJson = JSONObject("""
         {
             "param1": 1
         }
@@ -228,6 +228,26 @@ class JsonMergerTest {
         """))
 
         assertSameJson(merge, """
+        {
+            "param1": 1,
+            "param2": 2
+        }
+        """)
+    }
+
+    @Test
+    fun `merges JSONObjects to JSONObject`() {
+        val merge = JsonMerger().merge(baseJson = JSONObject("""
+        {
+            "param1": 1
+        }
+        """), overrideJson = JSONObject("""
+        {
+            "param2": 2
+        }
+        """))
+
+        assertSameJson(merge.toString(), """
         {
             "param1": 1,
             "param2": 2
