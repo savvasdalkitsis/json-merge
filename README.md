@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/savvasdalkitsis/json-merge.svg?style=shield)](https://circleci.com/gh/savvasdalkitsis/json-merge)
+
 json-merge
 ======
 
