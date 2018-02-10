@@ -255,6 +255,26 @@ class JsonMergerTest {
         """)
     }
 
+    @Test
+    fun `merges JSONObjects to JSONObject using infix method`() {
+        val merge = JSONObject("""
+        {
+            "param1": 1
+        }
+        """) mergeWith JSONObject("""
+        {
+            "param2": 2
+        }
+        """)
+
+        assertSameJson(merge.toString(), """
+        {
+            "param1": 1,
+            "param2": 2
+        }
+        """)
+    }
+
     private fun assertSameJson(actual: String, expected: String) {
         assertThat(Gson().fromJson(actual, JsonElement::class.java), sameBeanAs(Gson().fromJson(expected, JsonElement::class.java)))
     }

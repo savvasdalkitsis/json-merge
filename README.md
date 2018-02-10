@@ -1,7 +1,7 @@
 json-merge
 ======
 
-**json-merge** is a library allowing you to merge two json files for the JVM.
+**json-merge** is a library allowing you to merge two json files for the JVM written in Kotlin.
 
 It currently supports two modes for merging arrays and objects.
 
@@ -205,7 +205,7 @@ To use it in your project, add the following to your project
 - Gradle:
 
 ```groovy
-compile 'com.savvasdalkitsis:json-merge:0.0.2'
+compile 'com.savvasdalkitsis:json-merge:0.0.3'
 ```
 
 - Maven:
@@ -214,7 +214,7 @@ compile 'com.savvasdalkitsis:json-merge:0.0.2'
 <dependency>
   <groupId>com.savvasdalkitsis</groupId>
   <artifactId>json-merge</artifactId>
-  <version>0.0.2</version>
+  <version>0.0.3</version>
 </dependency>
 ```
 

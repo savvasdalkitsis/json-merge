@@ -142,4 +142,9 @@ class JsonMerger @JvmOverloads constructor(val arrayMergeMode: ArrayMergeMode = 
 
 }
 
+/**
+ * Merges two [JSONObject]s using a [JsonMerger] with the default merge modes
+ */
+infix fun JSONObject.mergeWith(overrideJson: JSONObject) = JsonMerger().merge(baseJson = this, overrideJson = overrideJson)
+
 private fun JSONObject.valueOrNull(key: String) = if (has(key)) this[key] else null
