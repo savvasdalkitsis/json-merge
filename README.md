@@ -205,7 +205,7 @@ JsonMerger(objectMergeMode = JsonMerger.ObjectMergeMode.MERGE_OBJECT)
   },
   "object2": {
     "param2": true
-  },
+  }
 }
 ```
 
@@ -219,7 +219,7 @@ JsonMerger(objectMergeMode = JsonMerger.ObjectMergeMode.MERGE_OBJECT)
   "object2": {
     "__json-merge:objectMergeMode": "replaceObject",
     "param3": true
-  },
+  }
 }
 ```
 
