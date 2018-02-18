@@ -23,6 +23,8 @@ import com.savvasdalkitsis.jsonmerger.JsonMerger.ObjectMergeMode.REPLACE_OBJECT
 import org.json.JSONArray
 import org.json.JSONObject
 
+private const val OVERRIDE_OBJECT_MERGE_KEY = "__json-merge:objectMergeMode"
+
 /**
  * Main object used to perform json merges. Accepts two parameters to control
  * how the merge will be performed.
@@ -95,20 +97,35 @@ class JsonMerger @JvmOverloads constructor(val arrayMergeMode: ArrayMergeMode = 
     fun mergeToString(baseJson: JSONObject, overrideJson: JSONObject): String
             = merge(baseJson, overrideJson).toString()
 
-    private fun mergeElement(base: Any?, newValue: Any) = when (base) {
-        is JSONObject -> mergeObject(base, newValue)
+    private fun mergeElement(base: Any?, newValue: Any, objectMergeMode: ObjectMergeMode = this.objectMergeMode) = when (base) {
+        is JSONObject -> mergeObject(base, newValue, objectMergeMode)
         is JSONArray -> mergeArray(base, newValue)
         else -> newValue
     }
 
-    private fun mergeObject(base: JSONObject, override: Any): JSONObject {
+    private fun maybeOverrideMergeMode(override: Any, objectMergeMode: ObjectMergeMode): ObjectMergeMode {
+        return when ((override as? JSONObject)?.valueOrNull(OVERRIDE_OBJECT_MERGE_KEY)) {
+            "replaceObject" -> {
+                override.remove(OVERRIDE_OBJECT_MERGE_KEY)
+                REPLACE_OBJECT
+            }
+            "mergeObject" -> {
+                override.remove(OVERRIDE_OBJECT_MERGE_KEY)
+                MERGE_OBJECT
+            }
+            else -> objectMergeMode
+        }
+    }
+
+    private fun mergeObject(base: JSONObject, override: Any, objectMergeMode: ObjectMergeMode): JSONObject {
         if (override !is JSONObject) {
             throw IllegalArgumentException(msg(base, override))
         }
         override.keys().forEach { key ->
-            base[key] = when (objectMergeMode) {
+            val mergeMode = maybeOverrideMergeMode(override[key], objectMergeMode)
+            base[key] = when (mergeMode) {
                 REPLACE_OBJECT -> override[key]
-                MERGE_OBJECT -> mergeElement(base.valueOrNull(key), override[key])
+                MERGE_OBJECT -> mergeElement(base.valueOrNull(key), override[key], mergeMode)
             }
         }
         return base

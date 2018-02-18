@@ -275,6 +275,97 @@ class JsonMergerTest {
         """)
     }
 
+    @Test
+    fun `can override global object merge mode via custom object parameter`() {
+        val merged = JsonMerger(objectMergeMode = JsonMerger.ObjectMergeMode.MERGE_OBJECT).merge(baseJson = """
+        {
+            "param0": 0,
+            "object1": {
+                "param1": 1,
+                "object2": {
+                    "param2": 2
+                }
+            }
+        }
+        """, overrideJson = """
+        {
+            "object1": {
+                "param1": 11,
+                "object2": {
+                    "__json-merge:objectMergeMode": "replaceObject",
+                    "param3": 3
+                }
+            }
+        }
+        """)
+
+        assertSameJson(merged, """
+        {
+           "param0": 0,
+           "object1": {
+                "param1": 11,
+                "object2": {
+                    "param3": 3
+                }
+            }
+        }
+        """)
+    }
+
+    @Test
+    fun `custom override object merge mode affects all sub objects`() {
+        val merged = JsonMerger(objectMergeMode = JsonMerger.ObjectMergeMode.REPLACE_OBJECT).merge(baseJson = """
+        {
+            "object0": {
+                "param0": 0
+            },
+            "object1": {
+                "param1": 1,
+                "object2": {
+                    "param2": 2,
+                    "object3" : {
+                        "param4": 4
+                    }
+                }
+            }
+        }
+        """, overrideJson = """
+        {
+            "object0": {
+                "param1": 1
+            },
+            "object1": {
+                "__json-merge:objectMergeMode": "mergeObject",
+                "object2": {
+                    "param3": 3,
+                    "object3" : {
+                        "param5": 5
+                    }
+                }
+            }
+        }
+        """)
+
+        assertSameJson(merged, """
+        {
+            "object0": {
+                "param1": 1
+            },
+           "object1": {
+                "param1": 1,
+                "object2": {
+                    "param2": 2,
+                    "param3": 3,
+                    "object3" : {
+                        "param4": 4,
+                        "param5": 5
+                    }
+                }
+            }
+        }
+        """)
+    }
+
     private fun assertSameJson(actual: String, expected: String) {
         assertThat(Gson().fromJson(actual, JsonElement::class.java), sameBeanAs(Gson().fromJson(expected, JsonElement::class.java)))
     }
