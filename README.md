@@ -185,6 +185,59 @@ JsonMerger(objectMergeMode = JsonMerger.ObjectMergeMode.MERGE_OBJECT)
 }
 ```
 
+### Overriding global object merge mode
+
+It is possible to change the object merge mode for specific json objects in the document by
+using a special annotation key `__json-merge:objectMergeMode` with two possible values
+`replaceObject` and `mergeObject`:
+
+
+```kotlin
+JsonMerger(objectMergeMode = JsonMerger.ObjectMergeMode.MERGE_OBJECT)
+```
+
+- base
+
+```json
+{
+  "object1": {
+    "param1": true
+  },
+  "object2": {
+    "param2": true
+  },
+}
+```
+
+- override
+
+```json
+{
+  "object1": {
+    "param2": true
+  },
+  "object2": {
+    "__json-merge:objectMergeMode": "replaceObject",
+    "param3": true
+  },
+}
+```
+
+- merged
+
+```json
+{
+  "object1": {
+      "param1": true,
+      "param2": true
+  },
+  "object2": {
+      "param3": true // the object was replaced even though the global setting is set to merge
+  }
+}
+```
+
+
 ### Things to keep in mind
 
 The library is doing an in memory merge using recursion. So there are two things 
