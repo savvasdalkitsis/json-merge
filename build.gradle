@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.2.21'
+    ext.kotlin_version = '1.4.32'
 
     ext.dev_name = 'Savvas Dalkitsis'
     ext.dev_email = 'kurosavvas@gmail.com'
@@ -9,7 +9,7 @@ buildscript {
     ext.project_description = 'json-merge is a library for merging json files for the JVM written in Kotlin'
     ext.project_group = 'com.savvasdalkitsis'
     ext.project_artifact = 'json-merge'
-    ext.project_version = '0.0.4'
+    ext.project_version = '0.0.5'
     ext.project_license = 'The Apache Software License, Version 2.0'
     ext.project_license_tag = 'Apache-2.0'
     ext.project_license_url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
@@ -38,7 +38,7 @@ repositories {
 dependencies {
     compile (
         "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version",
-        "org.json:json:20180130",
+        "org.json:json:20210307",
     )
     testCompile (
         'junit:junit:4.11',
