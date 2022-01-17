@@ -9,7 +9,7 @@ buildscript {
     ext.project_description = 'json-merge is a library for merging json files for the JVM written in Kotlin'
     ext.project_group = 'com.savvasdalkitsis'
     ext.project_artifact = 'json-merge'
-    ext.project_version = '0.0.5'
+    ext.project_version = '0.0.6'
     ext.project_license = 'The Apache Software License, Version 2.0'
     ext.project_license_tag = 'Apache-2.0'
     ext.project_license_url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
@@ -34,7 +34,7 @@ repositories {
 }
 
 dependencies {
-    implementation (
+    api (
             "org.json:json:20180130",
     )
     testImplementation (

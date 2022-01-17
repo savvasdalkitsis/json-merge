@@ -260,7 +260,7 @@ To use it in your project, add the following to your project
 - Gradle:
 
 ```groovy
-compile 'com.savvasdalkitsis:json-merge:0.0.5'
+implementation 'com.savvasdalkitsis:json-merge:0.0.6'
 ```
 
 - Maven:
@@ -269,7 +269,7 @@ compile 'com.savvasdalkitsis:json-merge:0.0.5'
 <dependency>
   <groupId>com.savvasdalkitsis</groupId>
   <artifactId>json-merge</artifactId>
-  <version>0.0.5</version>
+  <version>0.0.6</version>
 </dependency>
 ```
 
