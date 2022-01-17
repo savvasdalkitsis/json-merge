@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.2.21'
+    ext.kotlin_version = '1.5.10'
 
     ext.dev_name = 'Savvas Dalkitsis'
     ext.dev_email = 'kurosavvas@gmail.com'
@@ -9,119 +9,107 @@ buildscript {
     ext.project_description = 'json-merge is a library for merging json files for the JVM written in Kotlin'
     ext.project_group = 'com.savvasdalkitsis'
     ext.project_artifact = 'json-merge'
-    ext.project_version = '0.0.4'
+    ext.project_version = '0.0.5'
     ext.project_license = 'The Apache Software License, Version 2.0'
     ext.project_license_tag = 'Apache-2.0'
     ext.project_license_url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
 
     repositories {
         mavenCentral()
-        jcenter()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'kotlin'
-apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
-
-sourceCompatibility = 1.5
+plugins {
+    id 'java'
+    id "org.jetbrains.kotlin.jvm" version "$kotlin_version"
+    id 'signing'
+    id 'maven'
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile (
-        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version",
-        "org.json:json:20180130",
+    implementation (
+            "org.json:json:20180130",
     )
-    testCompile (
-        'junit:junit:4.11',
-        "com.shazam:shazamcrest:0.11",
+    testImplementation (
+            'junit:junit:4.13.2',
+            "com.shazam:shazamcrest:0.11",
     )
 }
+
+group project_group
+version project_version
+archivesBaseName = project_artifact
+
+sourceCompatibility = 1.8
 
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
+
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
+task sourcesJar(type: Jar) {
     classifier = 'sources'
     from sourceSets.main.allSource
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
+task javadocJar(type: Jar) {
     classifier = 'javadoc'
-    from javadoc.destinationDir
+    from javadoc
 }
 
-publishing {
-    publications {
-        maven(MavenPublication) {
-            from components.java
-            groupId project_group
-            artifactId project_artifact
-            version project_version
-            artifact sourcesJar
-            artifact javadocJar
-            pom.withXml {
-                asNode().children().last() + {
-                    resolveStrategy = Closure.DELEGATE_FIRST
-                    name project_name
-                    description project_description
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+            pom.project {
+                name project_name
+                packaging 'jar'
+                artifactId project_artifact
+                description project_description
+                url "https://github.com/$github_name/$project_name"
+                scm {
                     url "https://github.com/$github_name/$project_name"
-                    scm {
-                        url "https://github.com/$github_name/$project_name"
-                        connection "scm:git:git://github.com/$github_name/${project_name}.git"
-                        developerConnection "scm:git:ssh:git@github.com:$github_name/${project_name}.git"
-                    }
-                    licenses {
-                        license {
-                            name project_license
-                            url project_license_url
-                            distribution 'repo'
-                        }
-                    }
-                    developers {
-                        developer {
-                            id github_name
-                            name dev_name
-                            email dev_email
-                        }
+                    connection "scm:git:git://github.com/$github_name/${project_name}.git"
+                    developerConnection "scm:git:ssh:git@github.com:$github_name/${project_name}.git"
+                }
+                licenses {
+                    license {
+                        name project_license
+                        url project_license_url
+                        distribution 'repo'
                     }
                 }
-            }
-        }
-    }
-}
-
-bintray {
-    user = BINTRAY_USER
-    key = BINTRAY_API_KEY
-    publications = ['maven']
-    pkg {
-        repo = 'maven'
-        name = project_name
-        desc = project_description
-        licenses = [project_license_tag]
-        publicDownloadNumbers = true
-        websiteUrl = "https://github.com/$github_name/$project_name"
-        issueTrackerUrl = "https://github.com/$github_name/$project_name/issues"
-        vcsUrl = "https://github.com/$github_name/${project_name}.git"
-        githubRepo = "$github_name/$project_name"
-        version {
-            name = project_version
-            vcsTag = project_version
-            gpg {
-                sign = true
+                developers {
+                    developer {
+                        id github_name
+                        name dev_name
+                        email dev_email
+                    }
+                }
             }
         }
     }

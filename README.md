@@ -252,7 +252,7 @@ be running the risk of a stack overflow
 Download
 ======
 
-The library is available on **JCenter**. Note that it is still in early development
+The library is available on **Maven Central**. Note that it is still in early development
 and things might change with subsequent versions.
 
 To use it in your project, add the following to your project
@@ -260,7 +260,7 @@ To use it in your project, add the following to your project
 - Gradle:
 
 ```groovy
-compile 'com.savvasdalkitsis:json-merge:0.0.4'
+compile 'com.savvasdalkitsis:json-merge:0.0.5'
 ```
 
 - Maven:
@@ -269,7 +269,7 @@ compile 'com.savvasdalkitsis:json-merge:0.0.4'
 <dependency>
   <groupId>com.savvasdalkitsis</groupId>
   <artifactId>json-merge</artifactId>
-  <version>0.0.4</version>
+  <version>0.0.5</version>
 </dependency>
 ```
 
