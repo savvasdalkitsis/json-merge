@@ -35,7 +35,7 @@ repositories {
 
 dependencies {
     api (
-            "org.json:json:20180130",
+            "org.json:json:20220320",
     )
     testImplementation (
             'junit:junit:4.13.2',
